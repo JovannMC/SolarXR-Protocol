@@ -31,6 +31,13 @@ enum ImuType: uint16 {
     ICM42688,
 }
 
+/// What kind of data the tracker supports
+enum TrackerDataSupport: uint8 {
+    ROTATION = 0,
+    FLEX_RESISTANCE,
+    FLEX_ANGLE,
+}
+
 
 /// A MAC address or a bluetooth address, or some other uniquely identifying address
 /// associated with the endpoint that we are communicating with. If it doesn't take
