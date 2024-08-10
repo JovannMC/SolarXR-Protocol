@@ -134,7 +134,7 @@ isHmd():boolean {
  */
 dataSupport():TrackerDataSupport {
   const offset = this.bb!.__offset(this.bb_pos, 28);
-  return offset ? this.bb!.readUint8(this.bb_pos + offset) : TrackerDataSupport.ROTATION;
+  return offset ? this.bb!.readUint8(this.bb_pos + offset) : TrackerDataSupport.OTHER;
 }
 
 static startTrackerInfo(builder:flatbuffers.Builder) {
@@ -190,7 +190,7 @@ static addIsHmd(builder:flatbuffers.Builder, isHmd:boolean) {
 }
 
 static addDataSupport(builder:flatbuffers.Builder, dataSupport:TrackerDataSupport) {
-  builder.addFieldInt8(12, dataSupport, TrackerDataSupport.ROTATION);
+  builder.addFieldInt8(12, dataSupport, TrackerDataSupport.OTHER);
 }
 
 static endTrackerInfo(builder:flatbuffers.Builder):flatbuffers.Offset {
@@ -249,7 +249,7 @@ constructor(
   public allowDriftCompensation: boolean = false,
   public mountingResetOrientation: QuatT|null = null,
   public isHmd: boolean = false,
-  public dataSupport: TrackerDataSupport = TrackerDataSupport.ROTATION
+  public dataSupport: TrackerDataSupport = TrackerDataSupport.OTHER
 ){}
 
 

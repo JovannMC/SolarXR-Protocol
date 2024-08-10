@@ -170,7 +170,7 @@ impl<'a> TrackerInfo<'a> {
     // Safety:
     // Created from valid Table for this object
     // which contains a valid value in this slot
-    unsafe { self._tab.get::<super::super::datatypes::hardware_info::TrackerDataSupport>(TrackerInfo::VT_DATA_SUPPORT, Some(super::super::datatypes::hardware_info::TrackerDataSupport::ROTATION)).unwrap()}
+    unsafe { self._tab.get::<super::super::datatypes::hardware_info::TrackerDataSupport>(TrackerInfo::VT_DATA_SUPPORT, Some(super::super::datatypes::hardware_info::TrackerDataSupport::OTHER)).unwrap()}
   }
 }
 
@@ -229,7 +229,7 @@ impl<'a> Default for TrackerInfoArgs<'a> {
       allow_drift_compensation: false,
       mounting_reset_orientation: None,
       is_hmd: false,
-      data_support: super::super::datatypes::hardware_info::TrackerDataSupport::ROTATION,
+      data_support: super::super::datatypes::hardware_info::TrackerDataSupport::OTHER,
     }
   }
 }
@@ -289,7 +289,7 @@ impl<'a: 'b, 'b> TrackerInfoBuilder<'a, 'b> {
   }
   #[inline]
   pub fn add_data_support(&mut self, data_support: super::super::datatypes::hardware_info::TrackerDataSupport) {
-    self.fbb_.push_slot::<super::super::datatypes::hardware_info::TrackerDataSupport>(TrackerInfo::VT_DATA_SUPPORT, data_support, super::super::datatypes::hardware_info::TrackerDataSupport::ROTATION);
+    self.fbb_.push_slot::<super::super::datatypes::hardware_info::TrackerDataSupport>(TrackerInfo::VT_DATA_SUPPORT, data_support, super::super::datatypes::hardware_info::TrackerDataSupport::OTHER);
   }
   #[inline]
   pub fn new(_fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>) -> TrackerInfoBuilder<'a, 'b> {

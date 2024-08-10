@@ -3,16 +3,27 @@
 package solarxr_protocol.datatypes.hardware_info;
 
 /**
- * What kind of data the tracker supports
+ * What kind of data the tracker supports.
+ * Note: the received data gets computed into a Quaternion rotation in any case.
  */
 @SuppressWarnings("unused")
 public final class TrackerDataSupport {
   private TrackerDataSupport() { }
-  public static final int ROTATION = 0;
-  public static final int FLEX_RESISTANCE = 1;
-  public static final int FLEX_ANGLE = 2;
+  public static final int OTHER = 0;
+  /**
+   * Rotation (e.g: IMUs or computed rotations in firmware)
+   */
+  public static final int ROTATION = 1;
+  /**
+   * Flex resistance (e.g: raw data from flex sensors or unscaled angle on a single axis)
+   */
+  public static final int FLEX_RESISTANCE = 2;
+  /**
+   * Flex angle (e.g: computed angle from flex sensors or angle on a single axis)
+   */
+  public static final int FLEX_ANGLE = 3;
 
-  public static final String[] names = { "ROTATION", "FLEX_RESISTANCE", "FLEX_ANGLE", };
+  public static final String[] names = { "OTHER", "ROTATION", "FLEX_RESISTANCE", "FLEX_ANGLE", };
 
   public static String name(int e) { return names[e]; }
 }

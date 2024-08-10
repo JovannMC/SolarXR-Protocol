@@ -886,17 +886,23 @@ inline const char *EnumNameImuType(ImuType e) {
   return EnumNamesImuType()[index];
 }
 
-/// What kind of data the tracker supports
+/// What kind of data the tracker supports.
+/// Note: the received data gets computed into a Quaternion rotation in any case.
 enum class TrackerDataSupport : uint8_t {
-  ROTATION = 0,
-  FLEX_RESISTANCE = 1,
-  FLEX_ANGLE = 2,
-  MIN = ROTATION,
+  OTHER = 0,
+  /// Rotation (e.g: IMUs or computed rotations in firmware)
+  ROTATION = 1,
+  /// Flex resistance (e.g: raw data from flex sensors or unscaled angle on a single axis)
+  FLEX_RESISTANCE = 2,
+  /// Flex angle (e.g: computed angle from flex sensors or angle on a single axis)
+  FLEX_ANGLE = 3,
+  MIN = OTHER,
   MAX = FLEX_ANGLE
 };
 
-inline const TrackerDataSupport (&EnumValuesTrackerDataSupport())[3] {
+inline const TrackerDataSupport (&EnumValuesTrackerDataSupport())[4] {
   static const TrackerDataSupport values[] = {
+    TrackerDataSupport::OTHER,
     TrackerDataSupport::ROTATION,
     TrackerDataSupport::FLEX_RESISTANCE,
     TrackerDataSupport::FLEX_ANGLE
@@ -905,7 +911,8 @@ inline const TrackerDataSupport (&EnumValuesTrackerDataSupport())[3] {
 }
 
 inline const char * const *EnumNamesTrackerDataSupport() {
-  static const char * const names[4] = {
+  static const char * const names[5] = {
+    "OTHER",
     "ROTATION",
     "FLEX_RESISTANCE",
     "FLEX_ANGLE",
@@ -915,7 +922,7 @@ inline const char * const *EnumNamesTrackerDataSupport() {
 }
 
 inline const char *EnumNameTrackerDataSupport(TrackerDataSupport e) {
-  if (flatbuffers::IsOutRange(e, TrackerDataSupport::ROTATION, TrackerDataSupport::FLEX_ANGLE)) return "";
+  if (flatbuffers::IsOutRange(e, TrackerDataSupport::OTHER, TrackerDataSupport::FLEX_ANGLE)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesTrackerDataSupport()[index];
 }
@@ -3262,7 +3269,7 @@ inline flatbuffers::Offset<TrackerInfo> CreateTrackerInfo(
     bool allow_drift_compensation = false,
     const solarxr_protocol::datatypes::math::Quat *mounting_reset_orientation = nullptr,
     bool is_hmd = false,
-    solarxr_protocol::datatypes::hardware_info::TrackerDataSupport data_support = solarxr_protocol::datatypes::hardware_info::TrackerDataSupport::ROTATION) {
+    solarxr_protocol::datatypes::hardware_info::TrackerDataSupport data_support = solarxr_protocol::datatypes::hardware_info::TrackerDataSupport::OTHER) {
   TrackerInfoBuilder builder_(_fbb);
   builder_.add_mounting_reset_orientation(mounting_reset_orientation);
   builder_.add_custom_name(custom_name);
@@ -3294,7 +3301,7 @@ inline flatbuffers::Offset<TrackerInfo> CreateTrackerInfoDirect(
     bool allow_drift_compensation = false,
     const solarxr_protocol::datatypes::math::Quat *mounting_reset_orientation = nullptr,
     bool is_hmd = false,
-    solarxr_protocol::datatypes::hardware_info::TrackerDataSupport data_support = solarxr_protocol::datatypes::hardware_info::TrackerDataSupport::ROTATION) {
+    solarxr_protocol::datatypes::hardware_info::TrackerDataSupport data_support = solarxr_protocol::datatypes::hardware_info::TrackerDataSupport::OTHER) {
   auto display_name__ = display_name ? _fbb.CreateString(display_name) : 0;
   auto custom_name__ = custom_name ? _fbb.CreateString(custom_name) : 0;
   return solarxr_protocol::data_feed::tracker::CreateTrackerInfo(

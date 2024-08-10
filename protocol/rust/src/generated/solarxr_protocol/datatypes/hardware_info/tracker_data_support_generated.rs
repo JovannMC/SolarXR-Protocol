@@ -12,28 +12,35 @@ use super::*;
 #[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
 pub const ENUM_MIN_TRACKER_DATA_SUPPORT: u8 = 0;
 #[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
-pub const ENUM_MAX_TRACKER_DATA_SUPPORT: u8 = 2;
+pub const ENUM_MAX_TRACKER_DATA_SUPPORT: u8 = 3;
 #[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
 #[allow(non_camel_case_types)]
-pub const ENUM_VALUES_TRACKER_DATA_SUPPORT: [TrackerDataSupport; 3] = [
+pub const ENUM_VALUES_TRACKER_DATA_SUPPORT: [TrackerDataSupport; 4] = [
+  TrackerDataSupport::OTHER,
   TrackerDataSupport::ROTATION,
   TrackerDataSupport::FLEX_RESISTANCE,
   TrackerDataSupport::FLEX_ANGLE,
 ];
 
-/// What kind of data the tracker supports
+/// What kind of data the tracker supports.
+/// Note: the received data gets computed into a Quaternion rotation in any case.
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[repr(transparent)]
 pub struct TrackerDataSupport(pub u8);
 #[allow(non_upper_case_globals)]
 impl TrackerDataSupport {
-  pub const ROTATION: Self = Self(0);
-  pub const FLEX_RESISTANCE: Self = Self(1);
-  pub const FLEX_ANGLE: Self = Self(2);
+  pub const OTHER: Self = Self(0);
+  /// Rotation (e.g: IMUs or computed rotations in firmware)
+  pub const ROTATION: Self = Self(1);
+  /// Flex resistance (e.g: raw data from flex sensors or unscaled angle on a single axis)
+  pub const FLEX_RESISTANCE: Self = Self(2);
+  /// Flex angle (e.g: computed angle from flex sensors or angle on a single axis)
+  pub const FLEX_ANGLE: Self = Self(3);
 
   pub const ENUM_MIN: u8 = 0;
-  pub const ENUM_MAX: u8 = 2;
+  pub const ENUM_MAX: u8 = 3;
   pub const ENUM_VALUES: &'static [Self] = &[
+    Self::OTHER,
     Self::ROTATION,
     Self::FLEX_RESISTANCE,
     Self::FLEX_ANGLE,
@@ -41,6 +48,7 @@ impl TrackerDataSupport {
   /// Returns the variant's name or "" if unknown.
   pub fn variant_name(self) -> Option<&'static str> {
     match self {
+      Self::OTHER => Some("OTHER"),
       Self::ROTATION => Some("ROTATION"),
       Self::FLEX_RESISTANCE => Some("FLEX_RESISTANCE"),
       Self::FLEX_ANGLE => Some("FLEX_ANGLE"),

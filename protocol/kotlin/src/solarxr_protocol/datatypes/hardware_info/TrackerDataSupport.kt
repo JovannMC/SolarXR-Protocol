@@ -3,15 +3,26 @@
 package solarxr_protocol.datatypes.hardware_info
 
 /**
- * What kind of data the tracker supports
+ * What kind of data the tracker supports.
+ * Note: the received data gets computed into a Quaternion rotation in any case.
  */
 @Suppress("unused")
 class TrackerDataSupport private constructor() {
     companion object {
-        const val ROTATION: UByte = 0u
-        const val FLEXRESISTANCE: UByte = 1u
-        const val FLEXANGLE: UByte = 2u
-        val names : Array<String> = arrayOf("ROTATION", "FLEX_RESISTANCE", "FLEX_ANGLE")
+        const val OTHER: UByte = 0u
+        /**
+         * Rotation (e.g: IMUs or computed rotations in firmware)
+         */
+        const val ROTATION: UByte = 1u
+        /**
+         * Flex resistance (e.g: raw data from flex sensors or unscaled angle on a single axis)
+         */
+        const val FLEXRESISTANCE: UByte = 2u
+        /**
+         * Flex angle (e.g: computed angle from flex sensors or angle on a single axis)
+         */
+        const val FLEXANGLE: UByte = 3u
+        val names : Array<String> = arrayOf("OTHER", "ROTATION", "FLEX_RESISTANCE", "FLEX_ANGLE")
         @JvmStatic
         fun name(e: Int) : String = names[e]
     }

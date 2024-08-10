@@ -31,10 +31,15 @@ enum ImuType: uint16 {
     ICM42688,
 }
 
-/// What kind of data the tracker supports
+/// What kind of data the tracker supports.
+/// Note: the received data gets computed into a Quaternion rotation in any case.
 enum TrackerDataSupport: uint8 {
-    ROTATION = 0,
+    OTHER = 0,
+    /// Rotation (e.g: IMUs or computed rotations in firmware)
+    ROTATION,
+    /// Flex resistance (e.g: raw data from flex sensors or unscaled angle on a single axis)
     FLEX_RESISTANCE,
+    /// Flex angle (e.g: computed angle from flex sensors or angle on a single axis)
     FLEX_ANGLE,
 }
 
