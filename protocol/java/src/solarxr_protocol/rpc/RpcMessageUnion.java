@@ -82,6 +82,7 @@ public class RpcMessageUnion {
   public solarxr_protocol.rpc.FirmwareUpdateStatusResponseT asFirmwareUpdateStatusResponse() { return (solarxr_protocol.rpc.FirmwareUpdateStatusResponseT) value; }
   public solarxr_protocol.rpc.FirmwareUpdateStopQueuesRequestT asFirmwareUpdateStopQueuesRequest() { return (solarxr_protocol.rpc.FirmwareUpdateStopQueuesRequestT) value; }
   public solarxr_protocol.rpc.SettingsResetRequestT asSettingsResetRequest() { return (solarxr_protocol.rpc.SettingsResetRequestT) value; }
+  public solarxr_protocol.rpc.ChangeProfileRequestT asChangeProfileRequest() { return (solarxr_protocol.rpc.ChangeProfileRequestT) value; }
 
   public static int pack(FlatBufferBuilder builder, RpcMessageUnion _o) {
     switch (_o.type) {
@@ -146,6 +147,7 @@ public class RpcMessageUnion {
       case RpcMessage.FirmwareUpdateStatusResponse: return solarxr_protocol.rpc.FirmwareUpdateStatusResponse.pack(builder, _o.asFirmwareUpdateStatusResponse());
       case RpcMessage.FirmwareUpdateStopQueuesRequest: return solarxr_protocol.rpc.FirmwareUpdateStopQueuesRequest.pack(builder, _o.asFirmwareUpdateStopQueuesRequest());
       case RpcMessage.SettingsResetRequest: return solarxr_protocol.rpc.SettingsResetRequest.pack(builder, _o.asSettingsResetRequest());
+      case RpcMessage.ChangeProfileRequest: return solarxr_protocol.rpc.ChangeProfileRequest.pack(builder, _o.asChangeProfileRequest());
       default: return 0;
     }
   }

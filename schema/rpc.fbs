@@ -73,6 +73,7 @@ union RpcMessage {
     FirmwareUpdateStatusResponse,
     FirmwareUpdateStopQueuesRequest,
     SettingsResetRequest,
+    ChangeProfileRequest
 }
 
 table RpcMessageHeader {
@@ -744,3 +745,8 @@ table ForgetDeviceRequest {
 }
 
 table SettingsResetRequest {}
+
+table ChangeProfileRequest {
+    profile_name: string;
+    type: string;
+}

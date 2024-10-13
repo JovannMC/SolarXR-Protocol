@@ -378,6 +378,9 @@ struct ForgetDeviceRequestBuilder;
 struct SettingsResetRequest;
 struct SettingsResetRequestBuilder;
 
+struct ChangeProfileRequest;
+struct ChangeProfileRequestBuilder;
+
 }  // namespace rpc
 
 namespace pub_sub {
@@ -1020,11 +1023,12 @@ enum class RpcMessage : uint8_t {
   FirmwareUpdateStatusResponse = 59,
   FirmwareUpdateStopQueuesRequest = 60,
   SettingsResetRequest = 61,
+  ChangeProfileRequest = 62,
   MIN = NONE,
-  MAX = SettingsResetRequest
+  MAX = ChangeProfileRequest
 };
 
-inline const RpcMessage (&EnumValuesRpcMessage())[62] {
+inline const RpcMessage (&EnumValuesRpcMessage())[63] {
   static const RpcMessage values[] = {
     RpcMessage::NONE,
     RpcMessage::HeartbeatRequest,
@@ -1087,13 +1091,14 @@ inline const RpcMessage (&EnumValuesRpcMessage())[62] {
     RpcMessage::FirmwareUpdateRequest,
     RpcMessage::FirmwareUpdateStatusResponse,
     RpcMessage::FirmwareUpdateStopQueuesRequest,
-    RpcMessage::SettingsResetRequest
+    RpcMessage::SettingsResetRequest,
+    RpcMessage::ChangeProfileRequest
   };
   return values;
 }
 
 inline const char * const *EnumNamesRpcMessage() {
-  static const char * const names[63] = {
+  static const char * const names[64] = {
     "NONE",
     "HeartbeatRequest",
     "HeartbeatResponse",
@@ -1156,13 +1161,14 @@ inline const char * const *EnumNamesRpcMessage() {
     "FirmwareUpdateStatusResponse",
     "FirmwareUpdateStopQueuesRequest",
     "SettingsResetRequest",
+    "ChangeProfileRequest",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameRpcMessage(RpcMessage e) {
-  if (flatbuffers::IsOutRange(e, RpcMessage::NONE, RpcMessage::SettingsResetRequest)) return "";
+  if (flatbuffers::IsOutRange(e, RpcMessage::NONE, RpcMessage::ChangeProfileRequest)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesRpcMessage()[index];
 }
@@ -1413,6 +1419,10 @@ template<> struct RpcMessageTraits<solarxr_protocol::rpc::FirmwareUpdateStopQueu
 
 template<> struct RpcMessageTraits<solarxr_protocol::rpc::SettingsResetRequest> {
   static const RpcMessage enum_value = RpcMessage::SettingsResetRequest;
+};
+
+template<> struct RpcMessageTraits<solarxr_protocol::rpc::ChangeProfileRequest> {
+  static const RpcMessage enum_value = RpcMessage::ChangeProfileRequest;
 };
 
 bool VerifyRpcMessage(flatbuffers::Verifier &verifier, const void *obj, RpcMessage type);
@@ -4710,6 +4720,9 @@ struct RpcMessageHeader FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const solarxr_protocol::rpc::SettingsResetRequest *message_as_SettingsResetRequest() const {
     return message_type() == solarxr_protocol::rpc::RpcMessage::SettingsResetRequest ? static_cast<const solarxr_protocol::rpc::SettingsResetRequest *>(message()) : nullptr;
   }
+  const solarxr_protocol::rpc::ChangeProfileRequest *message_as_ChangeProfileRequest() const {
+    return message_type() == solarxr_protocol::rpc::RpcMessage::ChangeProfileRequest ? static_cast<const solarxr_protocol::rpc::ChangeProfileRequest *>(message()) : nullptr;
+  }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<solarxr_protocol::datatypes::TransactionId>(verifier, VT_TX_ID, 4) &&
@@ -4962,6 +4975,10 @@ template<> inline const solarxr_protocol::rpc::FirmwareUpdateStopQueuesRequest *
 
 template<> inline const solarxr_protocol::rpc::SettingsResetRequest *RpcMessageHeader::message_as<solarxr_protocol::rpc::SettingsResetRequest>() const {
   return message_as_SettingsResetRequest();
+}
+
+template<> inline const solarxr_protocol::rpc::ChangeProfileRequest *RpcMessageHeader::message_as<solarxr_protocol::rpc::ChangeProfileRequest>() const {
+  return message_as_ChangeProfileRequest();
 }
 
 struct RpcMessageHeaderBuilder {
@@ -9870,6 +9887,71 @@ inline flatbuffers::Offset<SettingsResetRequest> CreateSettingsResetRequest(
   return builder_.Finish();
 }
 
+struct ChangeProfileRequest FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef ChangeProfileRequestBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_PROFILE_NAME = 4,
+    VT_TYPE = 6
+  };
+  const flatbuffers::String *profile_name() const {
+    return GetPointer<const flatbuffers::String *>(VT_PROFILE_NAME);
+  }
+  const flatbuffers::String *type() const {
+    return GetPointer<const flatbuffers::String *>(VT_TYPE);
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_PROFILE_NAME) &&
+           verifier.VerifyString(profile_name()) &&
+           VerifyOffset(verifier, VT_TYPE) &&
+           verifier.VerifyString(type()) &&
+           verifier.EndTable();
+  }
+};
+
+struct ChangeProfileRequestBuilder {
+  typedef ChangeProfileRequest Table;
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_profile_name(flatbuffers::Offset<flatbuffers::String> profile_name) {
+    fbb_.AddOffset(ChangeProfileRequest::VT_PROFILE_NAME, profile_name);
+  }
+  void add_type(flatbuffers::Offset<flatbuffers::String> type) {
+    fbb_.AddOffset(ChangeProfileRequest::VT_TYPE, type);
+  }
+  explicit ChangeProfileRequestBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  flatbuffers::Offset<ChangeProfileRequest> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<ChangeProfileRequest>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<ChangeProfileRequest> CreateChangeProfileRequest(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    flatbuffers::Offset<flatbuffers::String> profile_name = 0,
+    flatbuffers::Offset<flatbuffers::String> type = 0) {
+  ChangeProfileRequestBuilder builder_(_fbb);
+  builder_.add_type(type);
+  builder_.add_profile_name(profile_name);
+  return builder_.Finish();
+}
+
+inline flatbuffers::Offset<ChangeProfileRequest> CreateChangeProfileRequestDirect(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    const char *profile_name = nullptr,
+    const char *type = nullptr) {
+  auto profile_name__ = profile_name ? _fbb.CreateString(profile_name) : 0;
+  auto type__ = type ? _fbb.CreateString(type) : 0;
+  return solarxr_protocol::rpc::CreateChangeProfileRequest(
+      _fbb,
+      profile_name__,
+      type__);
+}
+
 }  // namespace rpc
 
 namespace pub_sub {
@@ -10837,6 +10919,10 @@ inline bool VerifyRpcMessage(flatbuffers::Verifier &verifier, const void *obj, R
     }
     case RpcMessage::SettingsResetRequest: {
       auto ptr = reinterpret_cast<const solarxr_protocol::rpc::SettingsResetRequest *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case RpcMessage::ChangeProfileRequest: {
+      auto ptr = reinterpret_cast<const solarxr_protocol::rpc::ChangeProfileRequest *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

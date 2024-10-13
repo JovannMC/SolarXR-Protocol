@@ -322,6 +322,8 @@ pub mod solarxr_protocol {
     pub use self::forget_device_request_generated::*;
     mod settings_reset_request_generated;
     pub use self::settings_reset_request_generated::*;
+    mod change_profile_request_generated;
+    pub use self::change_profile_request_generated::*;
   } // rpc
   mod message_bundle_generated;
   pub use self::message_bundle_generated::*;

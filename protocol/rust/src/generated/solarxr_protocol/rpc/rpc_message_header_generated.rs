@@ -984,6 +984,21 @@ impl<'a> RpcMessageHeader<'a> {
     }
   }
 
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn message_as_change_profile_request(&self) -> Option<ChangeProfileRequest<'a>> {
+    if self.message_type() == RpcMessage::ChangeProfileRequest {
+      self.message().map(|t| {
+       // Safety:
+       // Created from a valid Table for this object
+       // Which contains a valid union in this slot
+       unsafe { ChangeProfileRequest::init_from_table(t) }
+     })
+    } else {
+      None
+    }
+  }
+
 }
 
 impl flatbuffers::Verifiable for RpcMessageHeader<'_> {
@@ -1057,6 +1072,7 @@ impl flatbuffers::Verifiable for RpcMessageHeader<'_> {
           RpcMessage::FirmwareUpdateStatusResponse => v.verify_union_variant::<flatbuffers::ForwardsUOffset<FirmwareUpdateStatusResponse>>("RpcMessage::FirmwareUpdateStatusResponse", pos),
           RpcMessage::FirmwareUpdateStopQueuesRequest => v.verify_union_variant::<flatbuffers::ForwardsUOffset<FirmwareUpdateStopQueuesRequest>>("RpcMessage::FirmwareUpdateStopQueuesRequest", pos),
           RpcMessage::SettingsResetRequest => v.verify_union_variant::<flatbuffers::ForwardsUOffset<SettingsResetRequest>>("RpcMessage::SettingsResetRequest", pos),
+          RpcMessage::ChangeProfileRequest => v.verify_union_variant::<flatbuffers::ForwardsUOffset<ChangeProfileRequest>>("RpcMessage::ChangeProfileRequest", pos),
           _ => Ok(()),
         }
      })?
@@ -1540,6 +1556,13 @@ impl core::fmt::Debug for RpcMessageHeader<'_> {
         },
         RpcMessage::SettingsResetRequest => {
           if let Some(x) = self.message_as_settings_reset_request() {
+            ds.field("message", &x)
+          } else {
+            ds.field("message", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        RpcMessage::ChangeProfileRequest => {
+          if let Some(x) = self.message_as_change_profile_request() {
             ds.field("message", &x)
           } else {
             ds.field("message", &"InvalidFlatbuffer: Union discriminant does not match value.")
